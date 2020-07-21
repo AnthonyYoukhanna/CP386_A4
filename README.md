@@ -35,14 +35,14 @@
 
 ## AUTHORS
 
-Sakir Jiva, [@sakirjiva] (https://github.com/SakirJiva)
+Sakir Jiva, [@sakirjiva](https://github.com/SakirJiva)
 
-Basil Zuberi, [@basilzuberi] (https://github.com/basilzuberi)
+Basil Zuberi, [@basilzuberi](https://github.com/basilzuberi)
 
 ## CREDITS
-Sakir Jiva, @sakirjiva [@sakirjiva] (https://github.com/SakirJiva) Contributer
+Sakir Jiva, @sakirjiva [@sakirjiva](https://github.com/SakirJiva) Contributer
 
-Basil Zuberi, @basilzuberi [@basilzuberi] (https://github.com/basilzuberi) Contributer
+Basil Zuberi, @basilzuberi [@basilzuberi](https://github.com/basilzuberi) Contributer
 
 [Linux Manual](https://linux.die.net/man/) [https://linux.die.net/man/]
 
