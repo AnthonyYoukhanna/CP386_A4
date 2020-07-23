@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 		printf("Enter Command [999 to Exit]:\n");
 		scanf("%[^\n]%*c",cmd);
 		
-		if (strcmp(cmd,"RQ")==0)
+		if (strcasecmp(cmd,"RQ")==0)
 		{
 			printf("process request function\n");
 			/*
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 			*/
 
 		}
-		else if(strcmp(cmd,"RL")==0)
+		else if(strcasecmp(cmd,"RL")==0)
 		{
 			printf("process release function\n");
 			/*
