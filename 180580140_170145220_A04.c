@@ -8,7 +8,7 @@ Github Login: basilzuberi
 Student ID: 170145220
 
 
-Sakir Soyyab Jiva
+Sakir Soyab Jiva
 Github Login: SakirJiva 
 Student ID: 180580140
 */
