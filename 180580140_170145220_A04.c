@@ -57,18 +57,44 @@ int main(int argc, char *argv[])
 	}
 
 	
-	char *cmd=NULL;
+	char cmd[100];
 	do {
         
-        do {
-            printf("Enter Command [CTRL+C to Exit]:\n");
-			scanf("%c",cmd);
+		printf("Enter Command [999 to Exit]:\n");
+		scanf("%[^\n]%*c",cmd);
+		
+		if (strcmp(cmd,"RQ")==0)
+		{
+			printf("process request function\n");
+			/*
+			do something
+			*/
 
-           
-            while(getchar() !='\n'); 
-        } while (1);
-
-		//printf("%s",cmd);
+		}
+		else if(strcmp(cmd,"RL")==0)
+		{
+			printf("process release function\n");
+			/*
+			do something
+			*/
+		}
+		else if(strcmp(cmd,"*")==0)
+		{
+			printf("process/display current state\n");
+			/*
+			do something
+			*/
+		}
+		else if(strcmp(cmd,"999")==0)
+		{
+			printf("Good bye!\n");
+			break;
+		}
+		else
+		{
+			printf("invalid command try again\n");
+		}
+		
 
     } while (1);
 
