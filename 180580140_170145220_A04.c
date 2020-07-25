@@ -34,7 +34,7 @@ typedef struct customer
 int readFile(char* fileName, Customer** customer);
 
 
-int arr[3];
+int arr[4];
 
 /*main is where we will pass the commandline arguments for the filename 
 and we call readFile().
@@ -45,18 +45,19 @@ int main(int argc, char *argv[])
 	char *fileName ="sample4_in.txt";
 	Customer* customer = NULL;
 
-	if(argc!=5)
+	if(argc!=5) //check if we have enough
 	{
 		printf("INVALID: Enter 4 values only\n");
+		printf("Goodbye!\n");
 		return -1;
 	}
 	else
 	{
-		int i=0;
-		for (i=1; i<argc; i++)
+		int i=1;
+		for (i=1; i<argc; i++) //put argv into arr
 		{
 			arr[i]=atoi(argv[i]);
-			printf("%d\n ", arr[i]);
+			//printf("%d\n ", arr[i]);
 		}
 	}
 
@@ -64,10 +65,12 @@ int main(int argc, char *argv[])
 
 	printf("Number of Customers: %d\n",customerCount);
 
+	printf("Currently available resources: %d %d %d %d\n", arr[1],arr[2],arr[3],arr[4]);
+
 	printf("Maximum Resources from file:\n");
 
 	int i=0;
-	for (i=0; i<customerCount; i++)
+	for (i=0; i<customerCount; i++) //print customer items
 	{
 		printf("%d, %d, %d, %d\n", customer[i].item1,customer[i].item2,customer[i].item3,customer[i].item4);
 	}
