@@ -34,6 +34,7 @@ typedef struct customer
 int readFile(char* fileName, Customer** customer);
 
 
+int arr[3];
 
 /*main is where we will pass the commandline arguments for the filename 
 and we call readFile().
@@ -43,6 +44,21 @@ int main(int argc, char *argv[])
 {
 	char *fileName ="sample4_in.txt";
 	Customer* customer = NULL;
+
+	if(argc!=5)
+	{
+		printf("INVALID: Enter 4 values only\n");
+		return -1;
+	}
+	else
+	{
+		int i=0;
+		for (i=1; i<argc; i++)
+		{
+			arr[i]=atoi(argv[i]);
+			printf("%d\n ", arr[i]);
+		}
+	}
 
 	int customerCount = readFile(fileName,&customer);
 
@@ -60,7 +76,7 @@ int main(int argc, char *argv[])
 	char cmd[100];
 	do {
         
-		printf("Enter Command [999 to Exit]:\n");
+		printf("Enter Command [999 to Exit]:");
 		scanf("%[^\n]%*c",cmd);
 		
 		if (strcasecmp(cmd,"RQ")==0)
@@ -87,7 +103,7 @@ int main(int argc, char *argv[])
 		}
 		else if(strcmp(cmd,"999")==0)
 		{
-			printf("Good bye!\n");
+			printf("Goodbye!\n");
 			break;
 		}
 		else
