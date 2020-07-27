@@ -32,12 +32,14 @@ typedef struct customer
 	int item4;
 } Customer;
 int readFile(char* fileName, Customer** customer);
+int safetyAlgorithm(int customerCount);
 
 
 int available[4]; //available array
 int finish[5] = {1,1,1,1,1};
-Customer* customermax = NULL;
-Customer* customeralloc = NULL;
+Customer* customermax = NULL;    // max number of resources needed
+Customer* customeralloc = NULL;  // currently allocated resources
+Customer* customerneed = NULL;   // remaining resources (maxneeded-currently allocated)
 int i;
 
 /*main is where we will pass the commandline arguments for the filename 
@@ -68,13 +70,22 @@ int main(int argc, char *argv[])
 	int customerCount = readFile(fileName,&customermax);
 
 	customeralloc = (Customer*) malloc(sizeof(Customer)*customerCount);
+	customerneed = (Customer*) malloc(sizeof(Customer)*customerCount);
 	for(i =0; i <customerCount;i++)
 	{
+		// initial allocation is 0
 		customeralloc[i].cusID = customermax[i].cusID;
 		customeralloc[i].item1 = 0;
 		customeralloc[i].item2 = 0;
 		customeralloc[i].item3 = 0;
 		customeralloc[i].item4 = 0;
+
+		//initial allocation is 0 so, need = max (for now)
+		customerneed[i].cusID = customermax[i].cusID;
+		customerneed[i].item1 = customermax[i].item1;
+		customerneed[i].item2 = customermax[i].item2;
+		customerneed[i].item3 = customermax[i].item3;
+		customerneed[i].item4 = customermax[i].item4;
 	}
 
 	printf("Number of Customers: %d\n",customerCount);
@@ -94,6 +105,15 @@ int main(int argc, char *argv[])
 	{
 		printf("%d, %d, %d, %d\n", customeralloc[i].item1,customeralloc[i].item2,customeralloc[i].item3,customeralloc[i].item4);
 	}
+
+	printf("still needed\n");
+	for (i=0; i<customerCount; i++) //print customer items
+	{
+		printf("%d, %d, %d, %d\n", customerneed[i].item1,customerneed[i].item2,customerneed[i].item3,customerneed[i].item4);
+	}
+
+	int k = safetyAlgorithm(customerCount);
+	
 
 	
 	char cmd[100];
@@ -276,7 +296,43 @@ void outputValues()
 
 /* Implmentation of the safety algorithm
 */
-int safetyAlgorithm()
+int safetyAlgorithm(int customerCount)
+
 {
+	// make a copy of available allocation and needed
+	int available_copy[4];
+	Customer* alloc_copy = NULL;
+	Customer* needed_copy = NULL;
+	alloc_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
+	needed_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
+	for(i=0;i<4;i++)
+		available_copy[i] = available[i];
+
+	for(i =0; i <customerCount;i++)
+	{
+		
+		alloc_copy[i].cusID = customermax[i].cusID;
+		alloc_copy[i].item1 = customeralloc[i].item1;
+		alloc_copy[i].item2 = customeralloc[i].item2;
+		alloc_copy[i].item3 = customeralloc[i].item3;
+		alloc_copy[i].item4 = customeralloc[i].item4;
+		
+		needed_copy[i].cusID = customermax[i].cusID;
+		needed_copy[i].item1 = customerneed[i].item1;
+		needed_copy[i].item2 = customerneed[i].item2;
+		needed_copy[i].item3 = customerneed[i].item3;
+		needed_copy[i].item4 = customerneed[i].item4;
+	}
+	printf("current alloc copy \n");
+	for (i=0; i<customerCount; i++) //print customer items
+	{
+		printf("%d, %d, %d, %d\n", alloc_copy[i].item1,alloc_copy[i].item2,alloc_copy[i].item3,alloc_copy[i].item4);
+	}
+	printf("current need copy \n");
+	for (i=0; i<customerCount; i++) //print customer items
+	{
+		printf("%d, %d, %d, %d\n", needed_copy[i].item1,needed_copy[i].item2,needed_copy[i].item3,needed_copy[i].item4);
+	}
+
 	return 0;
 }
