@@ -114,13 +114,18 @@ int main(int argc, char *argv[])
 
 	int k = safetyAlgorithm(customerCount);
 	
+	if (k!=0){
+		printf("error with saftey algorithm\n");
+	}
 
 	
 	char cmd[100];
+	int threadID, item1,item2,item3,item4;
 	do {
         
 		printf("Enter Command [999 to Exit]:");
-		scanf("%[^\n]%*c",cmd);
+		scanf("%s %d %d %d %d %d",cmd,&threadID,&item1,&item2,&item3,&item4);
+
 		
 		if (strcasecmp(cmd,"RQ")==0)
 		{
@@ -128,6 +133,8 @@ int main(int argc, char *argv[])
 			/*
 			do something
 			*/
+			printf("You have typed: %s %d %d %d %d %d \n\n", cmd, threadID, item1,item2,item3,item4);
+			
 
 		}
 		else if(strcasecmp(cmd,"RL")==0)
@@ -136,6 +143,8 @@ int main(int argc, char *argv[])
 			/*
 			do something
 			*/
+
+			printf("You have typed: %s %d %d %d %d %d \n\n", cmd, threadID, item1,item2,item3,item4);
 		}
 		else if(strcmp(cmd,"*")==0)
 		{
@@ -143,11 +152,17 @@ int main(int argc, char *argv[])
 			/*
 			do something
 			*/
+			printf("You have typed: %s\n\n", cmd);
 		}
 		else if(strcasecmp(cmd,"RUN")==0)
 		{
-			printf("execute safe sequence");
-		}
+			printf("run function\n");
+			/*
+			do something
+			*/
+
+			printf("You have typed: %s\n\n", cmd);
+		}		
 		else if(strcmp(cmd,"999")==0)
 		{
 			printf("Goodbye!\n");
@@ -332,6 +347,12 @@ int safetyAlgorithm(int customerCount)
 	for (i=0; i<customerCount; i++) //print customer items
 	{
 		printf("%d, %d, %d, %d\n", needed_copy[i].item1,needed_copy[i].item2,needed_copy[i].item3,needed_copy[i].item4);
+	}
+
+	printf("available copy \n");
+	for (i=0; i<customerCount; i++) //print customer items
+	{
+		printf("%d\n", available_copy[i]);
 	}
 
 	return 0;
