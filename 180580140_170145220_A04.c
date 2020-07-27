@@ -36,6 +36,9 @@ int readFile(char* fileName, Customer** customer);
 
 int available[4]; //available array
 int finish[5] = {1,1,1,1,1};
+Customer* customermax = NULL;
+Customer* customeralloc = NULL;
+int i;
 
 /*main is where we will pass the commandline arguments for the filename 
 and we call readFile().
@@ -44,7 +47,7 @@ to runCommand function*/
 int main(int argc, char *argv[])
 {
 	char *fileName ="sample4_in.txt";
-	Customer* customermax = NULL;
+	
 
 	if(argc!=5) //check if we have enough
 	{
@@ -54,7 +57,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		int i=1;
+		//int i=1;
 		for (i=1; i<argc; i++) //put argv into available array
 		{
 			available[i]=atoi(argv[i]);
@@ -64,16 +67,32 @@ int main(int argc, char *argv[])
 
 	int customerCount = readFile(fileName,&customermax);
 
+	customeralloc = (Customer*) malloc(sizeof(Customer)*customerCount);
+	for(i =0; i <customerCount;i++)
+	{
+		customeralloc[i].cusID = customermax[i].cusID;
+		customeralloc[i].item1 = 0;
+		customeralloc[i].item2 = 0;
+		customeralloc[i].item3 = 0;
+		customeralloc[i].item4 = 0;
+	}
+
 	printf("Number of Customers: %d\n",customerCount);
 
 	printf("Currently available resources: %d %d %d %d\n", available[1],available[2],available[3],available[4]);
 
 	printf("Maximum Resources from file:\n");
 
-	int i=0;
+	//int i=0;
 	for (i=0; i<customerCount; i++) //print customer items
 	{
 		printf("%d, %d, %d, %d\n", customermax[i].item1,customermax[i].item2,customermax[i].item3,customermax[i].item4);
+	}
+
+	printf("current alloc\n");
+	for (i=0; i<customerCount; i++) //print customer items
+	{
+		printf("%d, %d, %d, %d\n", customeralloc[i].item1,customeralloc[i].item2,customeralloc[i].item3,customeralloc[i].item4);
 	}
 
 	
@@ -104,6 +123,10 @@ int main(int argc, char *argv[])
 			/*
 			do something
 			*/
+		}
+		else if(strcasecmp(cmd,"RUN")==0)
+		{
+			printf("execute safe sequence");
 		}
 		else if(strcmp(cmd,"999")==0)
 		{
