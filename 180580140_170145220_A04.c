@@ -34,7 +34,8 @@ typedef struct customer
 int readFile(char* fileName, Customer** customer);
 
 
-int arr[4];
+int available[4]; //available array
+int finish[5] = {1,1,1,1,1};
 
 /*main is where we will pass the commandline arguments for the filename 
 and we call readFile().
@@ -43,7 +44,7 @@ to runCommand function*/
 int main(int argc, char *argv[])
 {
 	char *fileName ="sample4_in.txt";
-	Customer* customer = NULL;
+	Customer* customermax = NULL;
 
 	if(argc!=5) //check if we have enough
 	{
@@ -54,25 +55,25 @@ int main(int argc, char *argv[])
 	else
 	{
 		int i=1;
-		for (i=1; i<argc; i++) //put argv into arr
+		for (i=1; i<argc; i++) //put argv into available array
 		{
-			arr[i]=atoi(argv[i]);
-			//printf("%d\n ", arr[i]);
+			available[i]=atoi(argv[i]);
+			//printf("%d\n ", available[i]);
 		}
 	}
 
-	int customerCount = readFile(fileName,&customer);
+	int customerCount = readFile(fileName,&customermax);
 
 	printf("Number of Customers: %d\n",customerCount);
 
-	printf("Currently available resources: %d %d %d %d\n", arr[1],arr[2],arr[3],arr[4]);
+	printf("Currently available resources: %d %d %d %d\n", available[1],available[2],available[3],available[4]);
 
 	printf("Maximum Resources from file:\n");
 
 	int i=0;
 	for (i=0; i<customerCount; i++) //print customer items
 	{
-		printf("%d, %d, %d, %d\n", customer[i].item1,customer[i].item2,customer[i].item3,customer[i].item4);
+		printf("%d, %d, %d, %d\n", customermax[i].item1,customermax[i].item2,customermax[i].item3,customermax[i].item4);
 	}
 
 	
@@ -122,7 +123,7 @@ int main(int argc, char *argv[])
 /*readFile function will take in a filename and read and return
 its contents for the bankers algorithm
 */
-int readFile(char* fileName, Customer** customer)
+int readFile(char* fileName, Customer** customermax)
 {
 	
     FILE *file = fopen(fileName, "r");
@@ -162,7 +163,7 @@ int readFile(char* fileName, Customer** customer)
 		customerCount++;
 		command = strtok(NULL,"\r\n");
 	}
-	*customer = (Customer*) malloc(sizeof(Customer)*customerCount);
+	*customermax = (Customer*) malloc(sizeof(Customer)*customerCount);
 
 	char* lines[customerCount];
 	command = NULL;
@@ -185,19 +186,19 @@ int readFile(char* fileName, Customer** customer)
 		while(token!=NULL)
 		{
 			switch(j){
-				(*customer)[k].cusID = cID;
+				(*customermax)[k].cusID = cID;
 				cID++;
 				case 0:
-					(*customer)[k].item1 = atoi(token);
+					(*customermax)[k].item1 = atoi(token);
 					break;
 				case 1:
-					(*customer)[k].item2 = atoi(token);
+					(*customermax)[k].item2 = atoi(token);
 					break;
 				case 2:
-					(*customer)[k].item3 = atoi(token);
+					(*customermax)[k].item3 = atoi(token);
 					break;
 				default:
-					(*customer)[k].item4 = atoi(token);
+					(*customermax)[k].item4 = atoi(token);
 					
 			}
 			
