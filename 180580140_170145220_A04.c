@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 
 	
 	char line[100];
-	char cmd[3];
+	char cmd[2];
 	// char *arguments[100];
 	int threadID=-1;
 	int item1=-1;
@@ -163,8 +163,6 @@ int main(int argc, char *argv[])
 			j++;
 			ptr = strtok(NULL," ");
 		}
-		printf("%s\n",cmd);
-
 		
 		if (strcasecmp(cmd,"RQ")==0)
 		{
