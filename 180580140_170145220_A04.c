@@ -119,12 +119,51 @@ int main(int argc, char *argv[])
 	}
 
 	
-	char cmd[100];
-	int threadID, item1,item2,item3,item4;
+	char line[100];
+	char cmd[3];
+	// char *arguments[100];
+	int threadID=-1;
+	int item1=-1;
+	int item2=-1;
+	int item3=-1;
+	int item4=-1;
+
+	
 	do {
         
 		printf("Enter Command [999 to Exit]:");
-		scanf("%s %d %d %d %d %d",cmd,&threadID,&item1,&item2,&item3,&item4);
+		fgets(line,100,stdin);
+		// scanf("%s %d %d %d %d %d",cmd,&threadID,&item1,&item2,&item3,&item4);
+		// printf("%s\n",line);
+
+		char *ptr = strtok(line, " ");
+
+		strcpy(cmd,ptr);
+
+		int j =0;
+		while(ptr!=NULL)
+		{
+			switch(j){
+				case 1:
+					threadID = atoi(ptr);
+					break;
+				case 2:
+					item1 = atoi(ptr);
+					break;
+				case 3:
+					item2 = atoi(ptr);
+					break;
+				case 4:
+					item3 = atoi(ptr);
+					break;
+				default:
+					item4 = atoi(ptr);
+			}
+			
+			j++;
+			ptr = strtok(NULL," ");
+		}
+		printf("%s\n",cmd);
 
 		
 		if (strcasecmp(cmd,"RQ")==0)
