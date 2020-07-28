@@ -36,6 +36,8 @@ int safetyAlgorithm(int customerCount);
 void requestResource(int threadID, int item1, int item2, int item3, int item4, int customerCount);
 void releaseResource(int threadID, int item1, int item2, int item3, int item4);
 void outputValues(int customerCount);
+void runProgram(int customerCount);
+void *runThread(void *thread);
 
 int available[4]; //available array
 int finish[5] = {1,1,1,1,1};
@@ -204,6 +206,7 @@ int main(int argc, char *argv[])
 			*/
 
 			printf("You have typed: %s\n\n", cmd);
+			runProgram(customerCount);
 		}		
 		else if(strstr(cmd,"999")!=NULL)
 		{
@@ -311,13 +314,80 @@ int readFile(char* fileName, Customer** customermax)
 
 }
 
-/* runProgram will use bankers algorithm to implement the program.
+/* runProgram will use safety algorithm to implement the program.
 we will use this function to call requestResource, releaseResource and outputValues
 depending on what command the user types: "RL, RQ or *"
 */
-void runProgram()
+void runProgram(int customerCount)
 {
+	
+	int isSafe = safetyAlgorithm(customerCount);
+	
+	if (isSafe == 1)
+	{
+
+		printf("RUNNING?");
+		for (i=0;i<customerCount;i++){ //create and execute threads
+			int runnable = safeSeq[i];
+
+			pthread_t threadID;
+			pthread_attr_t newThread;
+			pthread_attr_init(&newThread);
+
+			pthread_create(&threadID, &newThread, runThread, (void *)&runnable);
+
+
+			pthread_join(threadID, NULL);
+		}
+	}
+	
+
 	return;
+
+}
+
+void *runThread(void *thread)
+{
+	int *tid = (int*)thread;
+
+	printf("-> Customer #: %d\n", *tid);
+
+	printf("	Allocated Resources: ");
+	printf("%d ",customeralloc[*tid].item1);
+	printf("%d ",customeralloc[*tid].item2);
+	printf("%d ",customeralloc[*tid].item3);
+	printf("%d\n",customeralloc[*tid].item4);
+	printf("	Needed Resources: ");
+	printf("%d ",customerneed[*tid].item1);
+	printf("%d ",customerneed[*tid].item2);
+	printf("%d ",customerneed[*tid].item3);
+	printf("%d\n",customerneed[*tid].item4);
+	printf("	Available Resources: ");
+	printf("%d ",available[1]);
+	printf("%d ",available[2]);
+	printf("%d ",available[3]);
+	printf("%d\n",available[4]);
+
+	printf("	Thread has started \n");
+	sleep(2);
+	printf("	Thread has finished \n");
+	sleep(2);
+	printf("	Thread is releasing resources \n");
+
+	printf("	NEW AVAILABLE: ");
+
+	available[1]+=customeralloc[*tid].item1;
+	printf("%d ",available[1]);
+	available[2]+=customeralloc[*tid].item2;
+	printf("%d ",available[2]);
+	available[3]+=customeralloc[*tid].item3;
+	printf("%d ",available[3]);
+	available[4]+=customeralloc[*tid].item4;
+	printf("%d\n\n",available[4]);
+    sleep(2);
+
+	pthread_exit(0);
+
 
 }
 
@@ -576,7 +646,7 @@ int safetyAlgorithm(int customerCount)
 								//printf("item 4 added\n");
 								break;
 							default:
-								printf("something went wrong2\n");
+								printf("something went wrong\n");
 								
 						}		
 					}
