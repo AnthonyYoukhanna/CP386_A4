@@ -37,6 +37,7 @@ int safetyAlgorithm(int customerCount);
 
 int available[4]; //available array
 int finish[5] = {1,1,1,1,1};
+int safeSeq[5];
 Customer* customermax = NULL;    // max number of resources needed
 Customer* customeralloc = NULL;  // currently allocated resources
 Customer* customerneed = NULL;   // remaining resources (maxneeded-currently allocated)
@@ -63,7 +64,7 @@ int main(int argc, char *argv[])
 		for (i=1; i<argc; i++) //put argv into available array
 		{
 			available[i]=atoi(argv[i]);
-			//printf("%d\n ", available[i]);
+			printf("%d\n ", available[i]);
 		}
 	}
 
@@ -359,7 +360,8 @@ int safetyAlgorithm(int customerCount)
 	needed_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
 	int customerCount_Copy = customerCount;
 	for(i=0;i<4;i++)
-		available_copy[i] = available[i];
+		available_copy[i] = available[i+1];
+	
 
 	for(i =0; i <customerCount;i++)
 	{
@@ -379,94 +381,122 @@ int safetyAlgorithm(int customerCount)
 	int safe = 0;//false
 	int check = 0;
 	int j;
-
-	while(customerCount_Copy!=0)
+	//printf("test1\n");
+	
+	while(customerCount_Copy>0)
 	{
+		//printf("test2\n");
 		safe = 0;//false
-		for(i=0;i<4;i++)
+		for(i=0;i<5;i++)
 		{
-			if (finish[i])
+			
+			if (finish[i]==1)
 			{
+				//printf("%d\n",i);
+				
 				check = 1;
 				
-				for (j=0;j<3;j++)
+				
+				for (j=0;j<4;j++)
 				{
-					
-					switch(j)
+					if (j ==0)
 					{
-						case 0:
-							if (needed_copy[i].item1 > available_copy[j]) {
-								check = 0;
-								break;
-
-							}
+						if (needed_copy[i].item1 > available_copy[j]) {
+					 		//printf("%d %d\n",needed_copy[i].item1,available_copy[j]);
+							check = 0;
 							break;
-						
-						case 1:
-							if (needed_copy[i].item2 > available_copy[j]) {
-								check = 0;
-								break;
-							}
-							break;
-						
-						case 2:
-							if (needed_copy[i].item3 > available_copy[j]) {
-								check = 0;
-								break;
-							}
-							break;
-
-						case 3:
-							if (needed_copy[i].item4 > available_copy[j]) {
-								check = 0;
-								break;
-							}
-							break;
-
-						default:
-							printf("something went wrong1\n");
+						}
 					}
-					break;
+					if (j ==1)
+					{
+						if (needed_copy[i].item2 > available_copy[j]) {
+					 		//printf("%d %d",needed_copy[i].item1,available_copy[j]);
+							check = 0;
+							break;
+						}
+					}
+					if( j ==2)
+					{
+						if (needed_copy[i].item3 > available_copy[j]) {
+					 		//printf("%d %d",needed_copy[i].item1,available_copy[j]);
+							check = 0;
+							break;
+						}
+					}
+					if (j ==3)
+					{
+						if (needed_copy[i].item4 > available_copy[j]) {
+					 		//printf("%d %d",needed_copy[i].item1,available_copy[j]);
+							check = 0;
+							break;
+						}
+					}
+					
+					
 
 				}
-			}
+			
 
-			if (check) {
+			
+			if (check==1) {
+				//printf("%d\n",finish[i]);
 				finish[i] = 0;
+				//printf("%d\n",finish[i]);
+				safeSeq[(5-customerCount_Copy)] = i;
+				//printf("%d, %d\n",5-customerCount_Copy,i);
 				customerCount_Copy--;
 				safe = 1;
+				
 				for (j = 0; j < 4; j++){
+					
 
 					switch(j)
 					{
 						case 0:
 							available_copy[j] += alloc_copy[i].item1;
+							//printf("item 1 added\n");
 							break;
 						
 						case 1:
 							available_copy[j] += alloc_copy[i].item2;
+							//printf("item 2 added\n");
 							break;
 						case 2:
 							available_copy[j] += alloc_copy[i].item3;
+							//printf("item 3 added\n");
 							break;
 						case 3:
 							available_copy[j] += alloc_copy[i].item4;
+							//printf("item 4 added\n");
 							break;
 						default:
 							printf("something went wrong2\n");
 							
 					}		
 				}
-
-
+				printf("finished so far\n");
+				for (i=0;i<5;i++)
+					printf("%d",finish[i]);
+				printf("\n");
 				break;
             }
+			}
+			
 		}
+		if (safe == 0)
+		{
+			printf("not safe\n");
+			break;
+		}
+		
+		
+		
+	}
+	for (i = 0;i<5;i++){
+		printf("%d",safeSeq[i]);
 	}
 
-	 printf("\nAvailable vector: ");
-        for (i = 0; i < 4; i++)
-            printf("%d ", available_copy[i]);
+	
 
 	return safe;
 }
