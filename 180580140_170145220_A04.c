@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 			do something
 			*/
 			printf("You have typed: %s %d %d %d %d %d \n\n", cmd, threadID, item1,item2,item3,item4);
-			// printf("%d\n",threadID);
+			
 
 		}
 		else if(strstr(cmd,"RL")!=NULL)
@@ -346,7 +346,7 @@ void outputValues()
 	return;
 }
 
-/* Implmentation of the safety algorithm
+/* Implmentation of the safety algorithm 0 if unsafe
 */
 int safetyAlgorithm(int customerCount)
 
@@ -357,6 +357,7 @@ int safetyAlgorithm(int customerCount)
 	Customer* needed_copy = NULL;
 	alloc_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
 	needed_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
+	int customerCount_Copy = customerCount;
 	for(i=0;i<4;i++)
 		available_copy[i] = available[i];
 
@@ -375,22 +376,97 @@ int safetyAlgorithm(int customerCount)
 		needed_copy[i].item3 = customerneed[i].item3;
 		needed_copy[i].item4 = customerneed[i].item4;
 	}
-	printf("current alloc copy \n");
-	for (i=0; i<customerCount; i++) //print customer items
+	int safe = 0;//false
+	int check = 0;
+	int j;
+
+	while(customerCount_Copy!=0)
 	{
-		printf("%d, %d, %d, %d\n", alloc_copy[i].item1,alloc_copy[i].item2,alloc_copy[i].item3,alloc_copy[i].item4);
-	}
-	printf("current need copy \n");
-	for (i=0; i<customerCount; i++) //print customer items
-	{
-		printf("%d, %d, %d, %d\n", needed_copy[i].item1,needed_copy[i].item2,needed_copy[i].item3,needed_copy[i].item4);
+		safe = 0;//false
+		for(i=0;i<4;i++)
+		{
+			if (finish[i])
+			{
+				check = 1;
+				
+				for (j=0;j<3;j++)
+				{
+					
+					switch(j)
+					{
+						case 0:
+							if (needed_copy[i].item1 > available_copy[j]) {
+								check = 0;
+								break;
+
+							}
+							break;
+						
+						case 1:
+							if (needed_copy[i].item2 > available_copy[j]) {
+								check = 0;
+								break;
+							}
+							break;
+						
+						case 2:
+							if (needed_copy[i].item3 > available_copy[j]) {
+								check = 0;
+								break;
+							}
+							break;
+
+						case 3:
+							if (needed_copy[i].item4 > available_copy[j]) {
+								check = 0;
+								break;
+							}
+							break;
+
+						default:
+							printf("something went wrong1\n");
+					}
+					break;
+
+				}
+			}
+
+			if (check) {
+				finish[i] = 0;
+				customerCount_Copy--;
+				safe = 1;
+				for (j = 0; j < 4; j++){
+
+					switch(j)
+					{
+						case 0:
+							available_copy[j] += alloc_copy[i].item1;
+							break;
+						
+						case 1:
+							available_copy[j] += alloc_copy[i].item2;
+							break;
+						case 2:
+							available_copy[j] += alloc_copy[i].item3;
+							break;
+						case 3:
+							available_copy[j] += alloc_copy[i].item4;
+							break;
+						default:
+							printf("something went wrong2\n");
+							
+					}		
+				}
+
+
+				break;
+            }
+		}
 	}
 
-	printf("available copy \n");
-	for (i=0; i<customerCount; i++) //print customer items
-	{
-		printf("%d\n", available_copy[i]);
-	}
+	 printf("\nAvailable vector: ");
+        for (i = 0; i < 4; i++)
+            printf("%d ", available_copy[i]);
 
-	return 0;
+	return safe;
 }
