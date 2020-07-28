@@ -33,6 +33,7 @@ typedef struct customer
 } Customer;
 int readFile(char* fileName, Customer** customer);
 int safetyAlgorithm(int customerCount);
+void requestResource(int threadID, int item1, int item2, int item3, int item4, int customerCount);
 
 
 int available[4]; //available array
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
 		for (i=1; i<argc; i++) //put argv into available array
 		{
 			available[i]=atoi(argv[i]);
-			printf("%d\n ", available[i]);
+			//printf("%d\n ", available[i]);
 		}
 	}
 
@@ -113,11 +114,9 @@ int main(int argc, char *argv[])
 		printf("%d, %d, %d, %d\n", customerneed[i].item1,customerneed[i].item2,customerneed[i].item3,customerneed[i].item4);
 	}
 
-	int k = safetyAlgorithm(customerCount);
+	//int k = safetyAlgorithm(customerCount);
 	
-	if (k!=0){
-		printf("error with saftey algorithm\n");
-	}
+	
 
 	
 	char line[100];
@@ -172,6 +171,7 @@ int main(int argc, char *argv[])
 			do something
 			*/
 			printf("You have typed: %s %d %d %d %d %d \n\n", cmd, threadID, item1,item2,item3,item4);
+			requestResource(threadID,item1,item2,item3,item4,customerCount);
 			
 
 		}
@@ -324,8 +324,57 @@ for denied.  Command will look like this:
 RQ cus# th# th# th# th#
 example: RQ 0 3 1 2 1 (from assignment)
 */
-void requestResource()
+void requestResource(int threadID, int item1, int item2, int item3, int item4, int customerCount)
 {
+	if (item1<=customerneed[threadID].item1 && item2<=customerneed[threadID].item2 &&
+	item3<=customerneed[threadID].item3 && item4<=customerneed[threadID].item4)	
+	{
+		if(item1 <= available[1] && item2 <= available[2] && 
+		item3 <= available[3] && item1 <= available[3])
+		{
+			available[1] -= item1;
+			available[2] -= item2;
+			available[3] -= item3;
+			available[4] -= item4;
+
+			customeralloc[threadID].item1+= item1;
+			customeralloc[threadID].item2+= item2;
+			customeralloc[threadID].item3+= item3;
+			customeralloc[threadID].item4+= item4;
+
+			customerneed[threadID].item1-= item1;
+			customerneed[threadID].item2-= item2;
+			customerneed[threadID].item3-= item3;
+			customerneed[threadID].item4-= item4;
+
+			int safe = safetyAlgorithm(customerCount);
+			if (safe == 0)
+			{
+				available[1] += item1;
+				available[2] += item2;
+				available[3] += item3;
+				available[4] += item4;
+
+				customeralloc[threadID].item1-= item1;
+				customeralloc[threadID].item2-= item2;
+				customeralloc[threadID].item3-= item3;
+				customeralloc[threadID].item4-= item4;
+
+				customerneed[threadID].item1+= item1;
+				customerneed[threadID].item2+= item2;
+				customerneed[threadID].item3+= item3;
+				customerneed[threadID].item4+= item4;	
+				printf("insuffiecient resources, need to wait\n");
+			}
+			else
+			{
+				printf("request completed sucessfully\n");
+			}
+			
+
+		}
+	}
+
 	return;
 }
 
@@ -438,48 +487,48 @@ int safetyAlgorithm(int customerCount)
 			
 
 			
-			if (check==1) {
-				//printf("%d\n",finish[i]);
-				finish[i] = 0;
-				//printf("%d\n",finish[i]);
-				safeSeq[(5-customerCount_Copy)] = i;
-				//printf("%d, %d\n",5-customerCount_Copy,i);
-				customerCount_Copy--;
-				safe = 1;
-				
-				for (j = 0; j < 4; j++){
+				if (check==1) {
+					//printf("%d\n",finish[i]);
+					finish[i] = 0;
+					//printf("%d\n",finish[i]);
+					safeSeq[(5-customerCount_Copy)] = i;
+					//printf("%d, %d\n",5-customerCount_Copy,i);
+					customerCount_Copy--;
+					safe = 1;
 					
-
-					switch(j)
-					{
-						case 0:
-							available_copy[j] += alloc_copy[i].item1;
-							//printf("item 1 added\n");
-							break;
+					for (j = 0; j < 4; j++){
 						
-						case 1:
-							available_copy[j] += alloc_copy[i].item2;
-							//printf("item 2 added\n");
-							break;
-						case 2:
-							available_copy[j] += alloc_copy[i].item3;
-							//printf("item 3 added\n");
-							break;
-						case 3:
-							available_copy[j] += alloc_copy[i].item4;
-							//printf("item 4 added\n");
-							break;
-						default:
-							printf("something went wrong2\n");
+
+						switch(j)
+						{
+							case 0:
+								available_copy[j] += alloc_copy[i].item1;
+								//printf("item 1 added\n");
+								break;
 							
-					}		
+							case 1:
+								available_copy[j] += alloc_copy[i].item2;
+								//printf("item 2 added\n");
+								break;
+							case 2:
+								available_copy[j] += alloc_copy[i].item3;
+								//printf("item 3 added\n");
+								break;
+							case 3:
+								available_copy[j] += alloc_copy[i].item4;
+								//printf("item 4 added\n");
+								break;
+							default:
+								printf("something went wrong2\n");
+								
+						}		
+					}
+					printf("finished so far\n");
+					for (i=0;i<5;i++)
+						printf("%d",finish[i]);
+					printf("\n");
+					break;
 				}
-				printf("finished so far\n");
-				for (i=0;i<5;i++)
-					printf("%d",finish[i]);
-				printf("\n");
-				break;
-            }
 			}
 			
 		}
@@ -492,9 +541,10 @@ int safetyAlgorithm(int customerCount)
 		
 		
 	}
-	for (i = 0;i<5;i++){
-		printf("%d",safeSeq[i]);
-	}
+
+	// for (i = 0;i<5;i++){
+	// 	printf("%d",safeSeq[i]);
+	// }
 
 	
 
