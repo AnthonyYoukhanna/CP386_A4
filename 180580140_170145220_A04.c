@@ -164,17 +164,17 @@ int main(int argc, char *argv[])
 			ptr = strtok(NULL," ");
 		}
 		
-		if (strcasecmp(cmd,"RQ")==0)
+		if (strstr(cmd,"RQ")!=NULL)
 		{
 			printf("process request function\n");
 			/*
 			do something
 			*/
 			printf("You have typed: %s %d %d %d %d %d \n\n", cmd, threadID, item1,item2,item3,item4);
-			
+			// printf("%d\n",threadID);
 
 		}
-		else if(strcasecmp(cmd,"RL")==0)
+		else if(strstr(cmd,"RL")!=NULL)
 		{
 			printf("process release function\n");
 			/*
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 
 			printf("You have typed: %s %d %d %d %d %d \n\n", cmd, threadID, item1,item2,item3,item4);
 		}
-		else if(strcmp(cmd,"*")==0)
+		else if(strstr(cmd,"*")==0)
 		{
 			printf("process/display current state\n");
 			/*
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 			*/
 			printf("You have typed: %s\n\n", cmd);
 		}
-		else if(strcasecmp(cmd,"RUN")==0)
+		else if(strstr(cmd,"RUN")==0)
 		{
 			printf("run function\n");
 			/*
@@ -200,14 +200,14 @@ int main(int argc, char *argv[])
 
 			printf("You have typed: %s\n\n", cmd);
 		}		
-		else if(strcmp(cmd,"999")==0)
+		else if(strstr(cmd,"999")==0)
 		{
 			printf("Goodbye!\n");
 			break;
 		}
 		else
 		{
-			printf("invalid command try again\n");
+			printf("invalid command try inputting 'RQ,RL,* or RUN' [Case Sensitive]\n");
 		}
 		
 
