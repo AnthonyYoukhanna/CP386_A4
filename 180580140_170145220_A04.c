@@ -34,7 +34,8 @@ typedef struct customer
 int readFile(char* fileName, Customer** customer);
 int safetyAlgorithm(int customerCount);
 void requestResource(int threadID, int item1, int item2, int item3, int item4, int customerCount);
-
+void releaseResource(int threadID, int item1, int item2, int item3, int item4);
+void outputValues(int customerCount);
 
 int available[4]; //available array
 int finish[5] = {1,1,1,1,1};
@@ -183,6 +184,7 @@ int main(int argc, char *argv[])
 			*/
 
 			printf("You have typed: %s %d %d %d %d %d \n\n", cmd, threadID, item1,item2,item3,item4);
+			releaseResource(threadID,item1,item2,item3,item4);
 		}
 		else if(strstr(cmd,"*")!=NULL)
 		{
@@ -191,6 +193,8 @@ int main(int argc, char *argv[])
 			do something
 			*/
 			printf("You have typed: %s\n\n", cmd);
+			outputValues(customerCount);
+
 		}
 		else if(strstr(cmd,"RUN")!=NULL)
 		{
@@ -373,7 +377,17 @@ void requestResource(int threadID, int item1, int item2, int item3, int item4, i
 			
 
 		}
+		else
+		{
+			printf("can not request more than available resources\n");
+		}
+		
 	}
+	else
+	{
+		printf("can not request more than available resources\n");
+	}
+	
 
 	return;
 }
@@ -382,8 +396,32 @@ void requestResource(int threadID, int item1, int item2, int item3, int item4, i
 RQ cus# th# th# th# th#
 example: RL 4 1 2 3 1 (from assignment)
 */
-void releaseResource()
+void releaseResource(int threadID, int item1, int item2, int item3, int item4)
 {
+	if (item1<=customeralloc[threadID].item1 && item2<=customeralloc[threadID].item2 &&
+	item3<=customeralloc[threadID].item3 && item4<=customeralloc[threadID].item4)
+	{
+		available[1] += item1;
+		available[2] += item2;
+		available[3] += item3;
+		available[4] += item4;
+
+		customeralloc[threadID].item1-= item1;
+		customeralloc[threadID].item2-= item2;
+		customeralloc[threadID].item3-= item3;
+		customeralloc[threadID].item4-= item4;
+
+		customerneed[threadID].item1+= item1;
+		customerneed[threadID].item2+= item2;
+		customerneed[threadID].item3+= item3;
+		customerneed[threadID].item4+= item4;
+		printf("resources released sucessfully\n");
+	}
+	else
+	{
+		printf("can not release more than allocated resources\n");
+	}
+	
 	return;
 }
 
@@ -391,8 +429,27 @@ void releaseResource()
 when user uses "*" as a command we will output the current state of the struct
 show user Available, Maximum, Allocation and Need arrays
 */
-void outputValues()
+void outputValues(int customerCount)
 {
+	printf("Maximum Resources from file:\n");
+
+	//int i=0;
+	for (i=0; i<customerCount; i++) //print customer items
+	{
+		printf("%d, %d, %d, %d\n", customermax[i].item1,customermax[i].item2,customermax[i].item3,customermax[i].item4);
+	}
+
+	printf("current alloc\n");
+	for (i=0; i<customerCount; i++) //print customer items
+	{
+		printf("%d, %d, %d, %d\n", customeralloc[i].item1,customeralloc[i].item2,customeralloc[i].item3,customeralloc[i].item4);
+	}
+
+	printf("still needed\n");
+	for (i=0; i<customerCount; i++) //print customer items
+	{
+		printf("%d, %d, %d, %d\n", customerneed[i].item1,customerneed[i].item2,customerneed[i].item3,customerneed[i].item4);
+	}
 	return;
 }
 
