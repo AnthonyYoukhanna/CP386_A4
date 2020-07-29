@@ -40,7 +40,7 @@ void runProgram(int customerCount);
 void *runThread(void *thread);
 
 int available[5]; //available array
-int finish[5] = {1,1,1,1,1};
+
 int safeSeq[5];
 Customer* customermax = NULL;    // max number of resources needed
 Customer* customeralloc = NULL;  // currently allocated resources
@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
+		printf("\n\nWelcome to the program made by Sakir Jiva and Basil Zuberi. Hope u have fun :D\n\n");
 		//int i=1;
 		for (i=1; i<argc; i++) //put argv into available array
 		{
@@ -104,27 +105,11 @@ int main(int argc, char *argv[])
 	{
 		printf("%d, %d, %d, %d\n", customermax[i].item1,customermax[i].item2,customermax[i].item3,customermax[i].item4);
 	}
-
-	printf("current alloc\n");
-	for (i=0; i<customerCount; i++) //print customer items
-	{
-		printf("%d, %d, %d, %d\n", customeralloc[i].item1,customeralloc[i].item2,customeralloc[i].item3,customeralloc[i].item4);
-	}
-
-	printf("still needed\n");
-	for (i=0; i<customerCount; i++) //print customer items
-	{
-		printf("%d, %d, %d, %d\n", customerneed[i].item1,customerneed[i].item2,customerneed[i].item3,customerneed[i].item4);
-	}
-
-	//int k = safetyAlgorithm(customerCount);
-	
 	
 
 	
 	char line[100];
 	char cmd[2];
-	// char *arguments[100];
 	int threadID=-1;
 	int item1=-1;
 	int item2=-1;
@@ -136,8 +121,7 @@ int main(int argc, char *argv[])
         
 		printf("Enter Command [999 to Exit]:");
 		fgets(line,100,stdin);
-		// scanf("%s %d %d %d %d %d",cmd,&threadID,&item1,&item2,&item3,&item4);
-		// printf("%s\n",line);
+
 
 		char *ptr = strtok(line, " ");
 
@@ -320,14 +304,15 @@ depending on what command the user types: "RL, RQ or *"
 */
 void runProgram(int customerCount)
 {
-	printf("stupid1\n");
 
-	int isSafe = safetyAlgorithm(customerCount);
-	printf("stupid\n");
-	if (isSafe == 1)
+	int k=safetyAlgorithm(customerCount);
+	if (k==0)
 	{
+		printf("UNSAFE: Please check thread before continuing\n");
+		return;
+	}
+	else{
 
-		printf("RUNNING?");
 		for (i=0;i<customerCount;i++){ //create and execute threads
 			int runnable = safeSeq[i];
 
@@ -387,8 +372,17 @@ void *runThread(void *thread)
 	printf("%d\n\n",available[4]);
     sleep(2);
 
-	pthread_exit(0);
+	customeralloc[0].item1=0;
+	customeralloc[1].item2=0;
+	customeralloc[2].item3=0;
+	customeralloc[3].item4=0;
 
+	customerneed[0].item1 = customermax[0].item1;
+	customerneed[1].item2 = customermax[1].item2;
+	customerneed[2].item3 = customermax[2].item3;
+	customerneed[3].item4 = customermax[3].item4;
+
+	pthread_exit(0);
 
 }
 
@@ -534,22 +528,21 @@ void outputValues(int customerCount)
 int safetyAlgorithm(int customerCount)
 
 {
-	printf("test1");
-
+	
+	int finish[5] = {1,1,1,1,1};
 	// make a copy of available allocation and needed
-	int available_copy[4];
+	int available_copy[5];
 	Customer* alloc_copy = NULL;
-	printf("test1");
+
 	Customer* needed_copy = NULL;
 	alloc_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
 	needed_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
 	int customerCount_Copy = customerCount;
-	printf("test2");
 
 	for(i=1;i<5;i++)
 		available_copy[i] = available[i];
 
-	printf("test3");
+
 
 	
 
@@ -572,12 +565,10 @@ int safetyAlgorithm(int customerCount)
 	int check = 0;
 	int j;
 	//printf("test1\n");
-	printf("test4");
 
 	
 	while(customerCount_Copy>0)
 	{
-		//printf("test2\n");
 		safe = 0;//false
 		for(i=0;i<5;i++)
 		{
@@ -664,38 +655,24 @@ int safetyAlgorithm(int customerCount)
 								available_copy[j] += alloc_copy[i].item4;
 								//printf("item 4 added\n");
 								break;
-							default:
-								printf("something went wrong\n");
 								
 						}		
 					}
-
-					printf("finished so far\n");
-					for (i=0;i<5;i++)
-						printf("%d",finish[i]);
-					printf("\n");
 					break;
 				}
 			}
 			
 		}
 
-		// if (safe == 0)
-		// {
-		// 	printf("not safe\n");
-		// 	break;
-		// }
-		
-		
-		
+		if (safe == 0)
+		{
+			printf("not safe\n");
+			break;
+		}
+	
 	}
 
 
-	// for (i = 0;i<5;i++){
-	// 	printf("%d",safeSeq[i]);
-	// }
-
-	
 
 	return safe;
 }
