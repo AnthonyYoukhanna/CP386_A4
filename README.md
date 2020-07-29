@@ -1,6 +1,7 @@
-# PROJECT TITLE
+# CP386 Assignment 4
 
 ## MOTIVATION
+We decided to do this project because it is a requirement for the compeltion of our Operating Systems course at University.
 
 ## INSTALLATION
 
@@ -14,7 +15,7 @@
 
     1. "make warnings_ok" for ignoring warnings.
 
-1. Run on linux using "./FILE_NAME sample_in.txt"  --replace FILE_NAME with the name of the file and sample_in.txt with the input you require.
+1. Run on linux using "./Assignment_4 X X X X"  --replace X X X X with the Max Resources you desire.
 
     1. you may check file name by typing "ls", the created file will be highlited green.
 
@@ -25,13 +26,54 @@
 
 ## SCREENSHOTS
 
+![Screenshot1](/pics/SC1.png "Program Start")
+
+![Screenshot2](/pics/SC2.png "RQ, RL and * Example")
+
+![Screenshot3](/pics/SC3.png "Run command Part 1")
+
+![Screenshot4](/pics/SC4.png "Run command Part 2")
+
 ## CONTRIBUTION (Per Function)
+```c
+int main(int argc, char *argv[]) //basil
+int readFile(char* fileName, Customer** customer); //basil
+int safetyAlgorithm(int customerCount); //sakir
+void requestResource(int threadID, int item1, int item2, int item3, int item4, int customerCount); //sakir
+void releaseResource(int threadID, int item1, int item2, int item3, int item4); //sakir
+void outputValues(int customerCount); //sakir
+void runProgram(int customerCount); //basil
+void *runThread(void *thread); //basil
+```
+###check Commit log for more accurate contributions
 
 ## FEATURES
 
+1. Error checking for case sensitive commands.
+1. String split using fgets instead of scanf for saftey of buffer.
+1. Error checking for requesting or releasing more unnecessary number of resources.
+
 ## TESTS
 
+EX: ./Assignment_4 10 10 10 10
+    RQ 0 1 1 1 1
+    RQ 2 9 9 9 9
+    RL 2 9 9 9 9
+    *
+    RUN
+
 ## CODE EXAMPLE
+
+RQ: Request Resource
+RL: Release Resource
+* : Show current resources
+RUN: Run safety Algorithm and find Safe sequence
+999: Stop the program
+
+
+    
+All commands are case sensitive
+    
 
 ## AUTHORS
 
