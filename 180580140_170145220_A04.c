@@ -39,7 +39,7 @@ void outputValues(int customerCount);
 void runProgram(int customerCount);
 void *runThread(void *thread);
 
-int available[4]; //available array
+int available[5]; //available array
 int finish[5] = {1,1,1,1,1};
 int safeSeq[5];
 Customer* customermax = NULL;    // max number of resources needed
@@ -320,9 +320,10 @@ depending on what command the user types: "RL, RQ or *"
 */
 void runProgram(int customerCount)
 {
-	
+	printf("stupid1\n");
+
 	int isSafe = safetyAlgorithm(customerCount);
-	
+	printf("stupid\n");
 	if (isSafe == 1)
 	{
 
@@ -404,12 +405,14 @@ void requestResource(int threadID, int item1, int item2, int item3, int item4, i
 	item3<=customerneed[threadID].item3 && item4<=customerneed[threadID].item4)	
 	{
 		if(item1 <= available[1] && item2 <= available[2] && 
-		item3 <= available[3] && item1 <= available[3])
+		item3 <= available[3] && item4 <= available[4])
 		{
+
 			available[1] -= item1;
 			available[2] -= item2;
 			available[3] -= item3;
 			available[4] -= item4;
+
 
 			customeralloc[threadID].item1+= item1;
 			customeralloc[threadID].item2+= item2;
@@ -422,6 +425,7 @@ void requestResource(int threadID, int item1, int item2, int item3, int item4, i
 			customerneed[threadID].item4-= item4;
 
 			int safe = safetyAlgorithm(customerCount);
+
 			if (safe == 0)
 			{
 				available[1] += item1;
@@ -455,7 +459,7 @@ void requestResource(int threadID, int item1, int item2, int item3, int item4, i
 	}
 	else
 	{
-		printf("can not request more than available resources\n");
+		printf("can not request more than needed resources\n");
 	}
 	
 
@@ -500,7 +504,9 @@ when user uses "*" as a command we will output the current state of the struct
 show user Available, Maximum, Allocation and Need arrays
 */
 void outputValues(int customerCount)
+
 {
+	printf("Currently available resources: %d %d %d %d\n", available[1],available[2],available[3],available[4]);
 	printf("Maximum Resources from file:\n");
 
 	//int i=0;
@@ -528,15 +534,23 @@ void outputValues(int customerCount)
 int safetyAlgorithm(int customerCount)
 
 {
+	printf("test1");
+
 	// make a copy of available allocation and needed
 	int available_copy[4];
 	Customer* alloc_copy = NULL;
+	printf("test1");
 	Customer* needed_copy = NULL;
 	alloc_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
 	needed_copy = (Customer*) malloc(sizeof(Customer)*customerCount);
 	int customerCount_Copy = customerCount;
-	for(i=0;i<4;i++)
-		available_copy[i] = available[i+1];
+	printf("test2");
+
+	for(i=1;i<5;i++)
+		available_copy[i] = available[i];
+
+	printf("test3");
+
 	
 
 	for(i =0; i <customerCount;i++)
@@ -558,6 +572,8 @@ int safetyAlgorithm(int customerCount)
 	int check = 0;
 	int j;
 	//printf("test1\n");
+	printf("test4");
+
 	
 	while(customerCount_Copy>0)
 	{
@@ -571,10 +587,12 @@ int safetyAlgorithm(int customerCount)
 				//printf("%d\n",i);
 				
 				check = 1;
+
 				
 				
-				for (j=0;j<4;j++)
+				for (j=1;j<5;j++)
 				{
+
 					if (j ==0)
 					{
 						if (needed_copy[i].item1 > available_copy[j]) {
@@ -611,6 +629,7 @@ int safetyAlgorithm(int customerCount)
 					
 
 				}
+
 			
 
 			
@@ -622,8 +641,8 @@ int safetyAlgorithm(int customerCount)
 					//printf("%d, %d\n",5-customerCount_Copy,i);
 					customerCount_Copy--;
 					safe = 1;
-					
-					for (j = 0; j < 4; j++){
+
+					for (j = 1; j < 5; j++){
 						
 
 						switch(j)
@@ -650,6 +669,7 @@ int safetyAlgorithm(int customerCount)
 								
 						}		
 					}
+
 					printf("finished so far\n");
 					for (i=0;i<5;i++)
 						printf("%d",finish[i]);
@@ -659,15 +679,17 @@ int safetyAlgorithm(int customerCount)
 			}
 			
 		}
-		if (safe == 0)
-		{
-			printf("not safe\n");
-			break;
-		}
+
+		// if (safe == 0)
+		// {
+		// 	printf("not safe\n");
+		// 	break;
+		// }
 		
 		
 		
 	}
+
 
 	// for (i = 0;i<5;i++){
 	// 	printf("%d",safeSeq[i]);
