@@ -56,10 +56,15 @@ void *runThread(void *thread); //basil
 ## TESTS
 
 EX: ./Assignment_4 10 10 10 10
+
     RQ 0 1 1 1 1
+
     RQ 2 9 9 9 9
+
     RL 2 9 9 9 9
+
     *
+
     RUN
 
 ## CODE EXAMPLE
