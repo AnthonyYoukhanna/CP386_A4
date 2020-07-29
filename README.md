@@ -45,7 +45,7 @@ void outputValues(int customerCount); //sakir
 void runProgram(int customerCount); //basil
 void *runThread(void *thread); //basil
 ```
-###check Commit log for more accurate contributions
+### check Commit log for more accurate contributions
 
 ## FEATURES
 
