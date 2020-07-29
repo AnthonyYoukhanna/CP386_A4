@@ -36,7 +36,7 @@ We decided to do this project because it is a requirement for the compeltion of 
 
 ## CONTRIBUTION (Per Function)
 ```c
-int main(int argc, char *argv[]) //basil
+int main(int argc, char *argv[]); //basil
 int readFile(char* fileName, Customer** customer); //basil
 int safetyAlgorithm(int customerCount); //sakir
 void requestResource(int threadID, int item1, int item2, int item3, int item4, int customerCount); //sakir
